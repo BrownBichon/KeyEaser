@@ -13,6 +13,4 @@ var myEase = new KeyframeEase(easeSpeed, easeInfluence);
 myProps[0].setTemporalEaseAtKey(myKeys[1], [myEase],
 [myEase]);
 
-alert(myProps[0].keyValue(myKeys[1]));
-
 app.endUndoGroup();
