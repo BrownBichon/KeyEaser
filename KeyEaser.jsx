@@ -9,23 +9,24 @@ if (myLayers.length !=0) {
 		if (myProps.length !=0) {
 			for (var j = 0; j < myProps.length; j++) {
 				var myKeys = myProps[j].selectedKeys;
-				if (myKeys.length !=0) {
-					///////////////////
-					//To do --- if myKeys.length == 2;
-					///////////////////
+				if (myKeys.length == 2) {
+					//ease the keyframes
 					endEase(myProps[j], myKeys);
-					
 				} else {
-					alert("Please selecte two keyframes");
+					///////////////////
+					//if myKeys.length != 2;
+					//Do nothing to selectedKeys;
+					///////////////////
+					//alert("Please selecte two keyframes");
 				}
 			}
 		} else {
-			alert("Please selecte some Props");
+			//alert("Please selecte some Props");
 		}
 	}
 
 } else {
-	alert("Please selecte some layers");
+	//alert("Please selecte some layers");
 }
 
 
@@ -35,6 +36,8 @@ function endEase(selectedProp, selectedKeys) {
 	var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 	var endValue = selectedProp.keyValue(selectedKeys[1]);
 	selectedProp.setValueAtTime(endTime, endValue);
+	//Select the keyframe that just added
+	selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
 
 	//Change Value
 	var startValue = selectedProp.keyValue(selectedKeys[0]);
@@ -58,5 +61,9 @@ function endEase(selectedProp, selectedKeys) {
 
 }
 
+//subEase function
+function subEase(selectedProp, selectedKeys) {
+	// body...
+}
 
 app.endUndoGroup();
