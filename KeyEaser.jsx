@@ -1,44 +1,62 @@
-﻿app.beginUndoGroup("Keyframe");
+﻿app.beginUndoGroup("KeyEaser");
 
 var myLayers = app.project.activeItem.selectedLayers;
-var myProps = myLayers[0].selectedProperties;
-var myKeys = myProps[0].selectedKeys;
 
-//myKey = new KeyframeEase(speed, influence);
+//if keyframes are selected, do endEase()
+if (myLayers.length !=0) {
+	for (var i = 0; i < myLayers.length; i++) {
+		var myProps = myLayers[i].selectedProperties;
+		if (myProps.length !=0) {
+			for (var j = 0; j < myProps.length; j++) {
+				var myKeys = myProps[j].selectedKeys;
+				if (myKeys.length !=0) {
+					///////////////////
+					//To do --- if myKeys.length == 2;
+					///////////////////
+					endEase(myProps[j], myKeys);
+					
+				} else {
+					alert("Please selecte two keyframes");
+				}
+			}
+		} else {
+			alert("Please selecte some Props");
+		}
+	}
+
+} else {
+	alert("Please selecte some layers");
+}
 
 
+//endEase function
+function endEase(selectedProp, selectedKeys) {
+	//Add endKey
+	var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
+	var endValue = selectedProp.keyValue(selectedKeys[1]);
+	selectedProp.setValueAtTime(endTime, endValue);
 
+	//Change Value
+	var startValue = selectedProp.keyValue(selectedKeys[0]);
+	var midValue = endValue - (endValue - startValue)*0.056;
+	selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
+	//Change TemporalEase
+	var flatSpeed = 0;
+	var flatInfluence = 50;
+	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
-// setValueAtTime(time, newValue)
-// keyTime(keyIndex)
-// keyValue(keyIndex)
-// setValueAtKey(keyIndex, newValue)
+	var midInInfluence = flatInfluence;
+	var midOutInfluence = 18;
+	var midSpeed = (endValue-midValue)/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+	var midInEase = new KeyframeEase(midSpeed, midInInfluence);
+	var midOutEase = new KeyframeEase(midSpeed, midOutInfluence);
 
+	selectedProp.setTemporalEaseAtKey(selectedKeys[0], [flatEase],[flatEase]);
+	selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEase],[midOutEase]);
+	selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 
-//Add endKey
-var endTime = 2*myProps[0].keyTime(myKeys[1])-myProps[0].keyTime(myKeys[0]);
-var endValue = myProps[0].keyValue(myKeys[1]);
-myProps[0].setValueAtTime(endTime, endValue);
+}
 
-//Change Value
-var startValue = myProps[0].keyValue(myKeys[0]);
-var midValue = endValue - (endValue - startValue)*0.056;
-myProps[0].setValueAtKey(myKeys[1], midValue);
-
-//Change TemporalEase
-var flatSpeed = 0;
-var flatInfluence = 50;
-var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
-var midInInfluence = flatInfluence;
-var midOutInfluence = 18;
-var midSpeed = (endValue-midValue)/((endTime - myProps[0].keyTime(myKeys[1]))*0.18);
-var midInEase = new KeyframeEase(midSpeed, midInInfluence);
-var midOutEase = new KeyframeEase(midSpeed, midOutInfluence);
-
-myProps[0].setTemporalEaseAtKey(myKeys[0], [flatEase],[flatEase]);
-myProps[0].setTemporalEaseAtKey(myKeys[1], [midInEase],[midOutEase]);
-myProps[0].setTemporalEaseAtKey(myKeys[1] + 1, [flatEase],[flatEase]);
 
 app.endUndoGroup();
