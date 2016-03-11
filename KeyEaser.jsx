@@ -161,8 +161,13 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.ThreeD_SPATIAL) {
 		/////////////////////////
-		//Odd break corner occurs when apply the EndEase
+		//Odd break corner occurs when apply the EndEase （the auto bezeir case）
+		//https://forums.adobe.com/thread/422875
 		/////////////////////////
+
+		/////////////////////////
+		//To do...
+		//When it comes to position, try to separate the position property
 
 		alert("ThreeD_SPATIAL");
 		//Add endKey
@@ -194,8 +199,10 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.SHAPE) {
 		//To do...
+	} else if (selectedProp.propertyValueType == PropertyValueType.COLOR) {
+		//To do...
 	} 
-	
+
 }
 
 //subEase function
