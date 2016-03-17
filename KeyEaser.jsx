@@ -61,7 +61,6 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[0], [flatEase],[flatEase]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEase],[midOutEase]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
-
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD) {
 		alert("TwoD");
 		//Add endKey
@@ -128,7 +127,6 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[0], [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEaseX,midInEaseY,midInEaseZ],[midOutEaseX,midOutEaseY,midOutEaseZ]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
-
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD_SPATIAL) {
 		//Anchor Point Value is Alway a ThreeD_SPATIAL, haven't found a TwoD_SPATIAL property yet.
 		alert("TwoD_SPATIAL");
@@ -199,6 +197,9 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.SHAPE) {
 		//To do...
+		//Maybe do it the hard way//
+		//Read every vertex of the shape and bake the keyframes.//
+		//Find a way to calculate points of the Bézier curve//
 	} else if (selectedProp.propertyValueType == PropertyValueType.COLOR) {
 		//To do...
 	} 
