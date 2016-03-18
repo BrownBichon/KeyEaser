@@ -34,7 +34,7 @@ if (myLayers.length !=0) {
 function endEase(selectedProp, selectedKeys) {
 	//Determine the selectedProp's propertyValueType
 	if (selectedProp.propertyValueType == PropertyValueType.OneD) {
-		alert("OneD");
+		//alert("OneD");
 		//Add endKey
 		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 		var endValue = selectedProp.keyValue(selectedKeys[1]);
@@ -62,7 +62,7 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEase],[midOutEase]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD) {
-		alert("TwoD");
+		//alert("TwoD");
 		//Add endKey
 		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 		var endValue = selectedProp.keyValue(selectedKeys[1]);
@@ -93,7 +93,7 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEaseX,midInEaseY],[midOutEaseX,midOutEaseY]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase,flatEase],[flatEase,flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
-		alert("ThreeD");
+		//alert("ThreeD");
 		//Add endKey
 		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 		var endValue = selectedProp.keyValue(selectedKeys[1]);
@@ -129,7 +129,7 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD_SPATIAL) {
 		//Anchor Point Value is Alway a ThreeD_SPATIAL, haven't found a TwoD_SPATIAL property yet.
-		alert("TwoD_SPATIAL");
+		//alert("TwoD_SPATIAL");
 		//Add endKey
 		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 		var endValue = selectedProp.keyValue(selectedKeys[1]);
@@ -167,7 +167,7 @@ function endEase(selectedProp, selectedKeys) {
 		//To do...
 		//When it comes to position, try to separate the position property
 
-		alert("ThreeD_SPATIAL");
+		//alert("ThreeD_SPATIAL");
 		//Add endKey
 		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
 		var endValue = selectedProp.keyValue(selectedKeys[1]);
