@@ -17,9 +17,11 @@ function buildUI(thisObject) {
 	if (myPalette != null) {
 		var res = 
 		"Group {\
-			orientation: 'row', \
+			orientation: 'column', \
 			alignment: ['left', 'top'], \
 			alignChildren: ['left', 'top'], \
+			influenceSld: Slider {}, \
+			sliderValue: StaticText {text:'0'}, \
 			subEaseBtn: Button {text:'SubEase'}, \
 			endEaseBtn: Button {text:'EndEase'}, \
 		}"
@@ -28,9 +30,20 @@ function buildUI(thisObject) {
 		myPalette.layout.layout(true);
 		myPalette.layout.resize();
 
-		
+		//flatEase
+		myPalette.grp.influenceSld.onChange = function(){
+			keyEaser("flatEase");
+		}
+		myPalette.grp.influenceSld.onChanging = function(){
+			myPalette.grp.sliderValue.text = this.value;
+		}
+		//endEase
 		myPalette.grp.endEaseBtn.onClick = function () {
 			keyEaser("endEase");
+		}
+		//subEase
+		myPalette.grp.subEaseBtn.onClick = function () {
+			keyEaser("subEase");
 		}
 
 		myPalette.onResizing = myPalette.Resize = function () {this.layout.resize();}
@@ -52,14 +65,14 @@ function keyEaser(clickedBtn) {
 				for (var j = 0; j < myProps.length; j++) {
 					var myKeys = myProps[j].selectedKeys;
 					if (myKeys.length == 2 && clickedBtn == "endEase") {
-						//ease the keyframes
+						//endEase
 						endEase(myProps[j], myKeys);
-					} else {
-						///////////////////
-						//if myKeys.length != 2;
-						//Do nothing to selectedKeys;
-						///////////////////
-						//alert("Please selecte two keyframes");
+					} else if (myKeys.length == 3 && clickedBtn == "subEase") {
+						//subEase
+						subEase(myProps[j], myKeys);
+					} else if (myKeys.length !== 0) {
+						//flatEase
+						flatEase(myProps[j], myKeys);
 					}
 				}
 			}
@@ -252,6 +265,37 @@ function endEase(selectedProp, selectedKeys) {
 //subEase function
 function subEase(selectedProp, selectedKeys) {
 	// body...
+	alert("subEase");
+}
+
+//flatEase function
+function flatEase(selectedProp, selectedKeys) {
+
+	//Set TemporalEase
+	var flatSpeed = 0;
+	var flatInfluence = myPalette.grp.influenceSld.value;
+	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
+
+	//if flatInfluence == 0, set InterpolationType to LINEAR
+	if (flatInfluence == 0) {
+		setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR,KeyframeInterpolationType.LINEAR)
+	} else {
+		//Determine the selectedProp's propertyValueType
+		if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
+			}
+		} else if (selectedProp.propertyValueType == PropertyValueType.TwoD) {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase,flatEase],[flatEase,flatEase]);	
+			}
+		} else {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase],[flatEase]);		
+			}
+		}
+	}
+
 }
 
 
