@@ -1,33 +1,76 @@
-﻿app.beginUndoGroup("KeyEaser");
+﻿var scriptTitle = "KeyEaser";
 
-var myLayers = app.project.activeItem.selectedLayers;
+var myPalette = buildUI(this);
 
-//if keyframes are selected, do endEase()
-if (myLayers.length !=0) {
-	for (var i = 0; i < myLayers.length; i++) {
-		var myProps = myLayers[i].selectedProperties;
-		if (myProps.length !=0) {
-			for (var j = 0; j < myProps.length; j++) {
-				var myKeys = myProps[j].selectedKeys;
-				if (myKeys.length == 2) {
-					//ease the keyframes
-					endEase(myProps[j], myKeys);
-				} else {
-					///////////////////
-					//if myKeys.length != 2;
-					//Do nothing to selectedKeys;
-					///////////////////
-					//alert("Please selecte two keyframes");
-				}
-			}
-		} else {
-			//alert("Please selecte some Props");
-		}
+if (myPalette != null && myPalette instanceof Window) {
+	myPalette.show();
+}
+
+function buildUI(thisObject) {
+
+	if (thisObject instanceof Panel) {
+		var myPalette = thisObject;
+	} else {
+		var myPalette = new Window ("palette", scriptTitle, undefined, {resizeable: true});
 	}
 
-} else {
-	//alert("Please selecte some layers");
+	if (myPalette != null) {
+		var res = 
+		"Group {\
+			orientation: 'row', \
+			alignment: ['left', 'top'], \
+			alignChildren: ['left', 'top'], \
+			subEaseBtn: Button {text:'SubEase'}, \
+			endEaseBtn: Button {text:'EndEase'}, \
+		}"
+
+		myPalette.grp = myPalette.add(res);
+		myPalette.layout.layout(true);
+		myPalette.layout.resize();
+
+		
+		myPalette.grp.endEaseBtn.onClick = function () {
+			keyEaser("endEase");
+		}
+
+		myPalette.onResizing = myPalette.Resize = function () {this.layout.resize();}
+	}
+	return myPalette;
 }
+
+function keyEaser(clickedBtn) {
+	app.beginUndoGroup("KeyEaser");
+
+	var myLayers = app.project.activeItem.selectedLayers;
+
+	//if 2 keyframes are selected & endEaseBtn clicked, do endEase();
+	//if 3 keyframes are selected & subEaseBtn clicked, do subEase();
+	if (myLayers.length !=0) {
+		for (var i = 0; i < myLayers.length; i++) {
+			var myProps = myLayers[i].selectedProperties;
+			if (myProps.length !=0) {
+				for (var j = 0; j < myProps.length; j++) {
+					var myKeys = myProps[j].selectedKeys;
+					if (myKeys.length == 2 && clickedBtn == "endEase") {
+						//ease the keyframes
+						endEase(myProps[j], myKeys);
+					} else {
+						///////////////////
+						//if myKeys.length != 2;
+						//Do nothing to selectedKeys;
+						///////////////////
+						//alert("Please selecte two keyframes");
+					}
+				}
+			}
+		}
+	} 
+
+	app.endUndoGroup();
+}
+
+
+
 
 
 //endEase function
@@ -211,4 +254,4 @@ function subEase(selectedProp, selectedKeys) {
 	// body...
 }
 
-app.endUndoGroup();
+
