@@ -21,7 +21,7 @@ function buildUI(thisObject) {
 			alignment: ['left', 'top'], \
 			alignChildren: ['left', 'top'], \
 			influenceSld: Slider {}, \
-			sliderValue: StaticText {text:'0'}, \
+			sliderValue: StaticText {text:'0', bounds:[0,0,120,20]}, \
 			subEaseBtn: Button {text:'SubEase'}, \
 			endEaseBtn: Button {text:'EndEase'}, \
 		}"
@@ -277,8 +277,13 @@ function flatEase(selectedProp, selectedKeys) {
 	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 	//if flatInfluence == 0, set InterpolationType to LINEAR
+	/////////////////////////
+	/////Not working yet/////
+	/////////////////////////
 	if (flatInfluence == 0) {
-		setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR,KeyframeInterpolationType.LINEAR)
+		for (var k = 0; k < selectedKeys.length; k++) {
+			setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR,KeyframeInterpolationType.LINEAR);
+		}
 	} else {
 		//Determine the selectedProp's propertyValueType
 		if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
