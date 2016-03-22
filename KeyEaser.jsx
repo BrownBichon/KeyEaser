@@ -99,13 +99,8 @@ function keyEaser(clickedBtn) {
 			}
 		}
 	} 
-
 	app.endUndoGroup();
 }
-
-
-
-
 
 //endEase function
 function endEase(selectedProp, selectedKeys) {
@@ -287,22 +282,17 @@ function subEase(selectedProp, selectedKeys) {
 
 //flatEase function
 function flatEase(selectedProp, selectedKeys) {
-
-	//Set TemporalEase
-	var flatSpeed = 0;
-	var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
-	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
 	//if flatInfluence == 0, set InterpolationType to LINEAR
-	/////////////////////////
-	/////Not working yet/////
-	/////////////////////////
-	//Because when the Slider indicator was moved to 0, the onChange() didn't work.
-	if (myPalette.grp.influenceGrp.influenceValue.text == "0") {
+	if (myPalette.grp.influenceGrp.influenceSld.value == 0) {
 		for (var k = 0; k < selectedKeys.length; k++) {
 			selectedProp.setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR);
 		}
 	} else {
+		//Set TemporalEase
+		var flatSpeed = 0;
+		var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
+		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
+
 		//Determine the selectedProp's propertyValueType
 		if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
 			for (var k = 0; k < selectedKeys.length; k++) {
