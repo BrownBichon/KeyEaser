@@ -105,26 +105,27 @@ function keyEaser(clickedBtn) {
 //endEase function
 function endEase(selectedProp, selectedKeys) {
 	var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
+	var easeDuration = Math.round(10*myPalette.grp.easeDurationGrp.easeDurationSld.value)/10;
+
+	//Add endKey
+	var endTime = selectedProp.keyTime(selectedKeys[1]) + easeDuration * (selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]));
+	var endValue = selectedProp.keyValue(selectedKeys[1]);
+	selectedProp.setValueAtTime(endTime, endValue);
+	//Select the keyframe that just added
+	selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
+
+	//Set flatEase
+	var flatSpeed = 0;
+	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 	//Determine the selectedProp's propertyValueType
 	if (selectedProp.propertyValueType == PropertyValueType.OneD) {
-		//alert("OneD");
-		//Add endKey
-		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
-		var endValue = selectedProp.keyValue(selectedKeys[1]);
-		selectedProp.setValueAtTime(endTime, endValue);
-		//Select the keyframe that just added
-		selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
-
 		//Change Value
 		var startValue = selectedProp.keyValue(selectedKeys[0]);
-		var midValue = endValue - (endValue - startValue)*0.056;
+		var midValue = endValue - (endValue - startValue)*0.056*easeDuration;
 		selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
-		//Set TemporalEase
-		var flatSpeed = 0;
-		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
+		//Set midEase
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
 		var midSpeed = (endValue-midValue)/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
@@ -135,23 +136,12 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEase],[midOutEase]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase],[flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD) {
-		//alert("TwoD");
-		//Add endKey
-		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
-		var endValue = selectedProp.keyValue(selectedKeys[1]);
-		selectedProp.setValueAtTime(endTime, endValue);
-		//Select the keyframe that just added
-		selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
-
 		//Change Value
 		var startValue = selectedProp.keyValue(selectedKeys[0]);
-		var midValue = endValue - (endValue - startValue)*0.056;
+		var midValue = endValue - (endValue - startValue)*0.056*easeDuration;
 		selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
-		//Set TemporalEase
-		var flatSpeed = 0;
-		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
+		//Set midEase
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
 		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
@@ -165,23 +155,12 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEaseX,midInEaseY],[midOutEaseX,midOutEaseY]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase,flatEase],[flatEase,flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
-		//alert("ThreeD");
-		//Add endKey
-		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
-		var endValue = selectedProp.keyValue(selectedKeys[1]);
-		selectedProp.setValueAtTime(endTime, endValue);
-		//Select the keyframe that just added
-		selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
-
 		//Change Value
 		var startValue = selectedProp.keyValue(selectedKeys[0]);
-		var midValue = endValue - (endValue - startValue)*0.056;
+		var midValue = endValue - (endValue - startValue)*0.056*easeDuration;
 		selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
-		//Set TemporalEase
-		var flatSpeed = 0;
-		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
+		//Set midEase
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
 		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
@@ -199,24 +178,13 @@ function endEase(selectedProp, selectedKeys) {
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1], [midInEaseX,midInEaseY,midInEaseZ],[midOutEaseX,midOutEaseY,midOutEaseZ]);
 		selectedProp.setTemporalEaseAtKey(selectedKeys[1] + 1, [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
 	} else if (selectedProp.propertyValueType == PropertyValueType.TwoD_SPATIAL) {
-		//Anchor Point Value is Alway a ThreeD_SPATIAL, haven't found a TwoD_SPATIAL property yet.
-		//alert("TwoD_SPATIAL");
-		//Add endKey
-		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
-		var endValue = selectedProp.keyValue(selectedKeys[1]);
-		selectedProp.setValueAtTime(endTime, endValue);
-		//Select the keyframe that just added
-		selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
-
+		//Anchor Point Value is Always a ThreeD_SPATIAL, haven't found a TwoD_SPATIAL property yet.
 		//Change Value
 		var startValue = selectedProp.keyValue(selectedKeys[0]);
-		var midValue = endValue - (endValue - startValue)*0.056;
+		var midValue = endValue - (endValue - startValue)*0.056*easeDuration;
 		selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
-		//Set TemporalEase
-		var flatSpeed = 0;
-		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
+		//Set midEase
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
 		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
@@ -237,23 +205,12 @@ function endEase(selectedProp, selectedKeys) {
 		//To do...
 		//When it comes to position, try to separate the position property
 
-		//alert("ThreeD_SPATIAL");
-		//Add endKey
-		var endTime = 2*selectedProp.keyTime(selectedKeys[1])-selectedProp.keyTime(selectedKeys[0]);
-		var endValue = selectedProp.keyValue(selectedKeys[1]);
-		selectedProp.setValueAtTime(endTime, endValue);
-		//Select the keyframe that just added
-		selectedProp.setSelectedAtKey(selectedKeys[1] + 1, true);
-
 		//Change Value
 		var startValue = selectedProp.keyValue(selectedKeys[0]);
-		var midValue = endValue - (endValue - startValue)*0.056;
+		var midValue = endValue - (endValue - startValue)*0.056*easeDuration;
 		selectedProp.setValueAtKey(selectedKeys[1], midValue);
 
-		//Set TemporalEase
-		var flatSpeed = 0;
-		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
-
+		//Set midEase
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
 		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) + (endValue[2]-midValue[2])*(endValue[2]-midValue[2]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
