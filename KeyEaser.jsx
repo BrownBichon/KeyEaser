@@ -101,6 +101,8 @@ function keyEaser(clickedBtn) {
 
 //endEase function
 function endEase(selectedProp, selectedKeys) {
+	var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
+
 	//Determine the selectedProp's propertyValueType
 	if (selectedProp.propertyValueType == PropertyValueType.OneD) {
 		//alert("OneD");
@@ -118,12 +120,11 @@ function endEase(selectedProp, selectedKeys) {
 
 		//Set TemporalEase
 		var flatSpeed = 0;
-		var flatInfluence = 50;
 		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 		var midInInfluence = flatInfluence;
-		var midOutInfluence = 18;
-		var midSpeed = (endValue-midValue)/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+		var midOutInfluence = 0.36*(100 - flatInfluence);
+		var midSpeed = (endValue-midValue)/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEase = new KeyframeEase(midSpeed, midInInfluence);
 		var midOutEase = new KeyframeEase(midSpeed, midOutInfluence);
 
@@ -146,13 +147,12 @@ function endEase(selectedProp, selectedKeys) {
 
 		//Set TemporalEase
 		var flatSpeed = 0;
-		var flatInfluence = 50;
 		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 		var midInInfluence = flatInfluence;
-		var midOutInfluence = 18;
-		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
-		var midSpeedY = (endValue[1]-midValue[1])/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+		var midOutInfluence = 0.36*(100 - flatInfluence);
+		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100);
+		var midSpeedY = (endValue[1]-midValue[1])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEaseX = new KeyframeEase(midSpeedX, midInInfluence);
 		var midInEaseY = new KeyframeEase(midSpeedY, midInInfluence);
 		var midOutEaseX = new KeyframeEase(midSpeedX, midOutInfluence);
@@ -177,14 +177,13 @@ function endEase(selectedProp, selectedKeys) {
 
 		//Set TemporalEase
 		var flatSpeed = 0;
-		var flatInfluence = 50;
 		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 		var midInInfluence = flatInfluence;
-		var midOutInfluence = 18;
-		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
-		var midSpeedY = (endValue[1]-midValue[1])/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
-		var midSpeedZ = (endValue[2]-midValue[2])/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+		var midOutInfluence = 0.36*(100 - flatInfluence);
+		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
+		var midSpeedY = (endValue[1]-midValue[1])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
+		var midSpeedZ = (endValue[2]-midValue[2])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEaseX = new KeyframeEase(midSpeedX, midInInfluence);
 		var midInEaseY = new KeyframeEase(midSpeedY, midInInfluence);
 		var midInEaseZ = new KeyframeEase(midSpeedZ, midInInfluence);
@@ -213,12 +212,11 @@ function endEase(selectedProp, selectedKeys) {
 
 		//Set TemporalEase
 		var flatSpeed = 0;
-		var flatInfluence = 50;
 		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 		var midInInfluence = flatInfluence;
-		var midOutInfluence = 18;
-		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+		var midOutInfluence = 0.36*(100 - flatInfluence);
+		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEase = new KeyframeEase(midSpeed, midInInfluence);
 		var midOutEase = new KeyframeEase(midSpeed, midOutInfluence);
 
@@ -251,12 +249,11 @@ function endEase(selectedProp, selectedKeys) {
 
 		//Set TemporalEase
 		var flatSpeed = 0;
-		var flatInfluence = 50;
 		var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 		var midInInfluence = flatInfluence;
-		var midOutInfluence = 18;
-		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) + (endValue[2]-midValue[2])*(endValue[2]-midValue[2]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*0.18);
+		var midOutInfluence = 0.36*(100 - flatInfluence);
+		var midSpeed = Math.sqrt( (endValue[0]-midValue[0])*(endValue[0]-midValue[0]) + (endValue[1]-midValue[1])*(endValue[1]-midValue[1]) + (endValue[2]-midValue[2])*(endValue[2]-midValue[2]) )/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEase = new KeyframeEase(midSpeed, midInInfluence);
 		var midOutEase = new KeyframeEase(midSpeed, midOutInfluence);
 
@@ -272,7 +269,6 @@ function endEase(selectedProp, selectedKeys) {
 	} else if (selectedProp.propertyValueType == PropertyValueType.COLOR) {
 		//To do...
 	} 
-
 }
 
 //subEase function
