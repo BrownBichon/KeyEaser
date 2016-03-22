@@ -20,10 +20,18 @@ function buildUI(thisObject) {
 			orientation: 'column', \
 			alignment: ['left', 'top'], \
 			alignChildren: ['left', 'top'], \
-			influenceSld: Slider {}, \
-			sliderValue: StaticText {text:'0', bounds:[0,0,120,20]}, \
-			subEaseBtn: Button {text:'SubEase'}, \
-			endEaseBtn: Button {text:'EndEase'}, \
+			influenceGrp: Group { \
+				influenceSld: Slider {}, \
+				influenceValue: EditText {text:'0', bounds:[0,0,30,20]}, \
+			}, \
+			easeDurationGrp: Group { \
+				easeDurationSld: Slider {}, \
+				easeDurationValue: EditText {text:'1', bounds:[0,0,30,20]}, \
+			}, \
+			easeButtonGrp: Group { \
+				subEaseBtn: Button {text:'SubEase'}, \
+				endEaseBtn: Button {text:'EndEase'}, \
+			}, \
 		}"
 
 		myPalette.grp = myPalette.add(res);
@@ -31,18 +39,23 @@ function buildUI(thisObject) {
 		myPalette.layout.resize();
 
 		//flatEase
-		myPalette.grp.influenceSld.onChange = function(){
+		myPalette.grp.influenceGrp.influenceSld.onChange = function(){
 			keyEaser("flatEase");
 		}
-		myPalette.grp.influenceSld.onChanging = function(){
-			myPalette.grp.sliderValue.text = this.value;
+		myPalette.grp.influenceGrp.influenceSld.onChanging = function () {
+			myPalette.grp.influenceGrp.influenceValue.text = Math.round(this.value);
+		}
+		myPalette.grp.influenceGrp.influenceValue.onChange = function () {
+			myPalette.grp.influenceGrp.influenceSld.value = Math.round(parseFloat(this.text));
+			this.text = myPalette.grp.influenceGrp.influenceSld.value;
+			keyEaser("flatEase");
 		}
 		//endEase
-		myPalette.grp.endEaseBtn.onClick = function () {
+		myPalette.grp.easeButtonGrp.endEaseBtn.onClick = function () {
 			keyEaser("endEase");
 		}
 		//subEase
-		myPalette.grp.subEaseBtn.onClick = function () {
+		myPalette.grp.easeButtonGrp.subEaseBtn.onClick = function () {
 			keyEaser("subEase");
 		}
 
@@ -273,16 +286,17 @@ function flatEase(selectedProp, selectedKeys) {
 
 	//Set TemporalEase
 	var flatSpeed = 0;
-	var flatInfluence = myPalette.grp.influenceSld.value;
+	var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
 	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
 
 	//if flatInfluence == 0, set InterpolationType to LINEAR
 	/////////////////////////
 	/////Not working yet/////
 	/////////////////////////
-	if (flatInfluence == 0) {
+	//Because when the Slider indicator was moved to 0, the onChange() didn't work.
+	if (myPalette.grp.influenceGrp.influenceValue.text == "0") {
 		for (var k = 0; k < selectedKeys.length; k++) {
-			setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR,KeyframeInterpolationType.LINEAR);
+			selectedProp.setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR);
 		}
 	} else {
 		//Determine the selectedProp's propertyValueType
@@ -296,7 +310,7 @@ function flatEase(selectedProp, selectedKeys) {
 			}
 		} else {
 			for (var k = 0; k < selectedKeys.length; k++) {
-				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase],[flatEase]);		
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase],[flatEase]);
 			}
 		}
 	}
