@@ -17,20 +17,46 @@ function buildUI(thisObject) {
 	if (myPalette != null) {
 		var res = 
 		"Group {\
-			orientation: 'row', \
+			orientation: 'column', \
 			alignment: ['left', 'top'], \
 			alignChildren: ['left', 'top'], \
-			subEaseBtn: Button {text:'SubEase'}, \
-			endEaseBtn: Button {text:'EndEase'}, \
+			influenceGrp: Group { \
+				influenceSld: Slider {}, \
+				influenceValue: EditText {text:'0', bounds:[0,0,30,20]}, \
+			}, \
+			easeDurationGrp: Group { \
+				easeDurationSld: Slider {}, \
+				easeDurationValue: EditText {text:'1', bounds:[0,0,30,20]}, \
+			}, \
+			easeButtonGrp: Group { \
+				subEaseBtn: Button {text:'SubEase'}, \
+				endEaseBtn: Button {text:'EndEase'}, \
+			}, \
 		}"
 
 		myPalette.grp = myPalette.add(res);
 		myPalette.layout.layout(true);
 		myPalette.layout.resize();
 
-		
-		myPalette.grp.endEaseBtn.onClick = function () {
+		//flatEase
+		myPalette.grp.influenceGrp.influenceSld.onChange = function(){
+			keyEaser("flatEase");
+		}
+		myPalette.grp.influenceGrp.influenceSld.onChanging = function () {
+			myPalette.grp.influenceGrp.influenceValue.text = Math.round(this.value);
+		}
+		myPalette.grp.influenceGrp.influenceValue.onChange = function () {
+			myPalette.grp.influenceGrp.influenceSld.value = Math.round(parseFloat(this.text));
+			this.text = myPalette.grp.influenceGrp.influenceSld.value;
+			keyEaser("flatEase");
+		}
+		//endEase
+		myPalette.grp.easeButtonGrp.endEaseBtn.onClick = function () {
 			keyEaser("endEase");
+		}
+		//subEase
+		myPalette.grp.easeButtonGrp.subEaseBtn.onClick = function () {
+			keyEaser("subEase");
 		}
 
 		myPalette.onResizing = myPalette.Resize = function () {this.layout.resize();}
@@ -52,14 +78,14 @@ function keyEaser(clickedBtn) {
 				for (var j = 0; j < myProps.length; j++) {
 					var myKeys = myProps[j].selectedKeys;
 					if (myKeys.length == 2 && clickedBtn == "endEase") {
-						//ease the keyframes
+						//endEase
 						endEase(myProps[j], myKeys);
-					} else {
-						///////////////////
-						//if myKeys.length != 2;
-						//Do nothing to selectedKeys;
-						///////////////////
-						//alert("Please selecte two keyframes");
+					} else if (myKeys.length == 3 && clickedBtn == "subEase") {
+						//subEase
+						subEase(myProps[j], myKeys);
+					} else if (myKeys.length !== 0) {
+						//flatEase
+						flatEase(myProps[j], myKeys);
 					}
 				}
 			}
@@ -252,6 +278,43 @@ function endEase(selectedProp, selectedKeys) {
 //subEase function
 function subEase(selectedProp, selectedKeys) {
 	// body...
+	alert("subEase");
+}
+
+//flatEase function
+function flatEase(selectedProp, selectedKeys) {
+
+	//Set TemporalEase
+	var flatSpeed = 0;
+	var flatInfluence = Math.round(myPalette.grp.influenceGrp.influenceSld.value);
+	var flatEase = new KeyframeEase(flatSpeed, flatInfluence);
+
+	//if flatInfluence == 0, set InterpolationType to LINEAR
+	/////////////////////////
+	/////Not working yet/////
+	/////////////////////////
+	//Because when the Slider indicator was moved to 0, the onChange() didn't work.
+	if (myPalette.grp.influenceGrp.influenceValue.text == "0") {
+		for (var k = 0; k < selectedKeys.length; k++) {
+			selectedProp.setInterpolationTypeAtKey(selectedKeys[k], KeyframeInterpolationType.LINEAR);
+		}
+	} else {
+		//Determine the selectedProp's propertyValueType
+		if (selectedProp.propertyValueType == PropertyValueType.ThreeD) {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase,flatEase,flatEase],[flatEase,flatEase,flatEase]);
+			}
+		} else if (selectedProp.propertyValueType == PropertyValueType.TwoD) {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase,flatEase],[flatEase,flatEase]);	
+			}
+		} else {
+			for (var k = 0; k < selectedKeys.length; k++) {
+				selectedProp.setTemporalEaseAtKey(selectedKeys[k], [flatEase],[flatEase]);
+			}
+		}
+	}
+
 }
 
 
