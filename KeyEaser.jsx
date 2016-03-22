@@ -151,7 +151,7 @@ function endEase(selectedProp, selectedKeys) {
 
 		var midInInfluence = flatInfluence;
 		var midOutInfluence = 0.36*(100 - flatInfluence);
-		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100);
+		var midSpeedX = (endValue[0]-midValue[0])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midSpeedY = (endValue[1]-midValue[1])/((endTime - selectedProp.keyTime(selectedKeys[1]))*(midOutInfluence/100));
 		var midInEaseX = new KeyframeEase(midSpeedX, midInInfluence);
 		var midInEaseY = new KeyframeEase(midSpeedY, midInInfluence);
