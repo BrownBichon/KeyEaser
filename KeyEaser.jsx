@@ -21,11 +21,11 @@ function buildUI(thisObject) {
 			alignment: ['left', 'top'], \
 			alignChildren: ['left', 'top'], \
 			influenceGrp: Group { \
-				influenceSld: Slider {}, \
-				influenceValue: EditText {text:'0', bounds:[0,0,30,20]}, \
+				influenceSld: Slider {value:50}, \
+				influenceValue: EditText {text:'50', bounds:[0,0,30,20]}, \
 			}, \
 			easeDurationGrp: Group { \
-				easeDurationSld: Slider {}, \
+				easeDurationSld: Slider {value:1, minvalue:0, maxvalue:2}, \
 				easeDurationValue: EditText {text:'1', bounds:[0,0,30,20]}, \
 			}, \
 			easeButtonGrp: Group { \
@@ -49,6 +49,14 @@ function buildUI(thisObject) {
 			myPalette.grp.influenceGrp.influenceSld.value = Math.round(parseFloat(this.text));
 			this.text = myPalette.grp.influenceGrp.influenceSld.value;
 			keyEaser("flatEase");
+		}
+		//easeDuration
+		myPalette.grp.easeDurationGrp.easeDurationSld.onChanging = function(){
+			myPalette.grp.easeDurationGrp.easeDurationValue.text = Math.round(10*this.value)/10;
+		}
+		myPalette.grp.easeDurationGrp.easeDurationValue.onChange = function(){
+			myPalette.grp.easeDurationGrp.easeDurationSld.value = Math.round(10*parseFloat(this.text))/10;
+			this.text = myPalette.grp.easeDurationGrp.easeDurationSld.value;
 		}
 		//endEase
 		myPalette.grp.easeButtonGrp.endEaseBtn.onClick = function () {
