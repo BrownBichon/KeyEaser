@@ -81,19 +81,23 @@ function keyEaser(clickedBtn) {
 	//if 3 keyframes are selected & subEaseBtn clicked, do subEase();
 	if (myLayers.length !=0) {
 		for (var i = 0; i < myLayers.length; i++) {
+			//selectedProperties returns effects & masks as PropertyGroups
 			var myProps = myLayers[i].selectedProperties;
 			if (myProps.length !=0) {
 				for (var j = 0; j < myProps.length; j++) {
-					var myKeys = myProps[j].selectedKeys;
-					if (myKeys.length == 2 && clickedBtn == "endEase") {
-						//endEase
-						endEase(myProps[j], myKeys);
-					} else if (myKeys.length == 3 && clickedBtn == "subEase") {
-						//subEase
-						subEase(myProps[j], myKeys);
-					} else if (myKeys.length !== 0) {
-						//flatEase
-						flatEase(myProps[j], myKeys);
+					//Avoid PropertyGroups
+					if (!myProps[j].isEffect && !myProps[j].isMask) {
+						var myKeys = myProps[j].selectedKeys;
+						if (myKeys.length == 2 && clickedBtn == "endEase") {
+							//endEase
+							endEase(myProps[j], myKeys);
+						} else if (myKeys.length == 3 && clickedBtn == "subEase") {
+							//subEase
+							subEase(myProps[j], myKeys);
+						} else if (myKeys.length !== 0) {
+							//flatEase
+							flatEase(myProps[j], myKeys);
+						}
 					}
 				}
 			}
